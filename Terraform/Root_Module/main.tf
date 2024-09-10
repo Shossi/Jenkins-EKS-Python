@@ -202,9 +202,27 @@ module "jenkins_agent_role" {
     }]
   })
   policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+    "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   ]
+}
+
+resource "aws_iam_role_policy" "jenkins_agent_role_policy" {
+  role = module.jenkins_agent_role.role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect   = "Allow",
+      Action   = [
+        "eks:DescribeCluster",
+        "eks:ListClusters",
+        "eks:ListNodegroups",
+        "eks:AccessKubernetesApi"
+        ]
+      Resource = "*"
+    }]
+  })
 }
 
 resource "aws_iam_instance_profile" "this" {
