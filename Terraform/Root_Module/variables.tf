@@ -1,7 +1,7 @@
 variable "azs" {
-  description = "Availability Zones"
+  description = "Availability Zones for the VPCs"
   type        = list(string)
-  default     = ["eu-central-1a", "us-west-1b"]
+  default     = ["eu-central-1a", "eu-central-1b"]
 }
 
 variable "jenkins_public_subnets" {
@@ -24,13 +24,20 @@ variable "eks_private_subnets" {
   type        = list(string)
 }
 
-variable "vpc_cidr_block" {
-  description = "CIDR block for VPC"
+variable "jenkins_vpc_cidr" {
+  description = "CIDR block for Jenkins VPC"
   type        = string
+  default     = "10.10.0.0/16"
+}
+
+variable "eks_vpc_cidr" {
+  description = "CIDR block for EKS VPC"
+  type        = string
+  default     = "10.100.0.0/16"
 }
 
 variable "environment" {
-  description = "Environment (dev, staging, production)"
+  description = "Environment name (dev, staging, production)"
   type        = string
 }
 
@@ -65,19 +72,71 @@ variable "node_group_name" {
 }
 
 variable "desired_size" {
-  description = "Desired size of EKS node group"
+  description = "Desired size of the EKS node group"
   type        = number
   default     = 1
 }
 
 variable "min_size" {
-  description = "Minimum size of EKS node group"
+  description = "Minimum size of the EKS node group"
   type        = number
   default     = 1
 }
 
 variable "max_size" {
-  description = "Maximum size of EKS node group"
+  description = "Maximum size of the EKS node group"
   type        = number
   default     = 3
+}
+
+variable "vpc_cni_version" {
+  description = "Version for VPC CNI Addon"
+  type        = string
+  default     = "v1.12.0"
+}
+
+variable "kube_proxy_version" {
+  description = "Version for kube-proxy Addon"
+  type        = string
+  default     = "v1.27.0"
+}
+
+variable "coredns_version" {
+  description = "Version for CoreDNS Addon"
+  type        = string
+  default     = "v1.8.7"
+}
+
+variable "jenkins_lb_name" {
+  description = "Name of the Jenkins Load Balancer"
+  type        = string
+  default     = "jenkins-lb"
+}
+
+variable "jenkins_lb_port" {
+  description = "Port for Jenkins Load Balancer"
+  type        = number
+  default     = 8080
+}
+
+variable "jenkins_lb_listener_port" {
+  description = "Listener port for Jenkins Load Balancer"
+  type        = number
+  default     = 80
+}
+
+variable "eks_cluster_role_name" {
+  description = "IAM Role for EKS Cluster"
+  type        = string
+}
+
+variable "eks_node_group_role_name" {
+  description = "IAM Role for EKS Node Group"
+  type        = string
+}
+
+variable "vpc_peering_name" {
+  description = "Name of the VPC peering connection"
+  type        = string
+  default     = "jenkins-to-eks"
 }

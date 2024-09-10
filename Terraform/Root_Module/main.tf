@@ -1,19 +1,16 @@
 module "jenkins_vpc" {
   source            = "../Modules/VPC"
   vpc_name          = "jenkins-vpc"
-  cidr              = "10.10.0.0/16"
+  cidr              = var.jenkins_vpc_cidr
   azs               = var.azs
   public_subnets    = var.jenkins_public_subnets
   private_subnets   = var.jenkins_private_subnets
-  #enable_dns_support = true
-  #enable_dns_hostnames = true
-  #map_public_ip_on_launch = true
 }
 
 module "eks_vpc" {
   source  = "../Modules/VPC"
   vpc_name = "eks-vpc"
-  cidr     = "10.100.0.0/16"
+  cidr     = var.eks_vpc_cidr
   azs      = var.azs
   public_subnets  = var.eks_public_subnets
   private_subnets = var.eks_private_subnets
@@ -28,7 +25,7 @@ resource "aws_vpc_peering_connection" "jenkins_eks" {
   auto_accept   = true
 
   tags = {
-    Name = "Jenkins-to-EKS"
+    Name = var.vpc_peering_name
   }
 }
 
@@ -58,12 +55,12 @@ module "eks_security_group" {
   vpc_id = module.eks_vpc.vpc_id
 }
 
-module "jenkins_secuirty_group" {
+module "jenkins_security_group" {
   source = "../Modules/SecurityGroup"
   description = "Security Group for Jenkins"
   ingress_rules = [
     { from_port = 22, to_port = 22, security_groups = [module.bastion_security_group.security_group_id] },
-    { from_port = 8080, to_port = 8080,}
+    { from_port = 8080, to_port = 8080 }
   ]
   egress_rules = [
     { from_port = 0, to_port = 0, cidr_blocks = ["0.0.0.0/0"] }
@@ -91,7 +88,7 @@ data "http" "ip" {
 
 module "bastion_host" {
   source = "../Modules/EC2"
-  ami    = "ami-0e04bcbe83a83792e"
+  ami    = var.bastion_ami
   instance_name = "Bastion"
   instance_type = "t2.micro"
   security_group_id = module.bastion_security_group.security_group_id
@@ -100,20 +97,20 @@ module "bastion_host" {
 
 module "jenkins_master" {
   source = "../Modules/EC2"
-  ami    = "ami-0e04bcbe83a83792e"
+  ami    = var.jenkins_ami
   instance_name = "Jenk-Master"
   instance_type = "t3.large"
-  security_group_id = module.bastion_security_group.security_group_id
+  security_group_id = module.jenkins_security_group.security_group_id
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
   key_name = var.key_name
 }
 
 module "jenkins_agent" {
   source = "../Modules/EC2"
-  ami    = "ami-0e04bcbe83a83792e"
+  ami    = var.jenkins_agent_ami
   instance_name = "Jenk-Agent"
   instance_type = "t2.micro"
-  security_group_id = module.bastion_security_group.security_group_id
+  security_group_id = module.jenkins_security_group.security_group_id
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
   iam_role = module.jenkins_agent_role.role_arn
   key_name = var.key_name
@@ -138,9 +135,9 @@ module "eks_node_group" {
   node_group_name     = var.node_group_name
   node_role_arn       = module.eks_node_group_role.role_arn
   subnet_ids          = module.eks_vpc.private_subnet_ids
-  desired_size        = 1
-  min_size            = 1
-  max_size            = 3
+  desired_size        = var.desired_size
+  min_size            = var.min_size
+  max_size            = var.max_size
   instance_types      = ["t2.small"]
   tags = {}
 }
@@ -149,7 +146,7 @@ module "eks_addon_vpc_cni" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "vpc-cni"
-  addon_version   = "v1.12.0"
+  addon_version   = var.vpc_cni_version
 
   tags = {
     Environment = var.environment
@@ -160,7 +157,7 @@ module "eks_addons_kube_proxy" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "kube-proxy"
-  addon_version   = "v1.27.0"
+  addon_version   = var.kube_proxy_version
 
   tags = {
     Environment = var.environment
@@ -171,7 +168,7 @@ module "eks_addons_coredns" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "coredns"
-  addon_version   = "v1.8.7"
+  addon_version   = var.coredns_version
 
   tags = {
     Environment = var.environment
@@ -237,24 +234,24 @@ module "eks_node_group_role" {
 
 module "jenkins_lb" {
   source = "../Modules/LoadBalancer"
-  lb_name            = "jenkins-lb"
+  lb_name            = var.jenkins_lb_name
   load_balancer_type = "application"
   internal           = false
   subnets            = module.jenkins_vpc.public_subnet_ids
-  security_groups    = [module.jenkins_secuirty_group.security_group_id]
+  security_groups    = [module.jenkins_security_group.security_group_id]
 
   target_group_name  = "jenkins-tg"
-  target_port        = 8080
+  target_port        = var.jenkins_lb_port
   target_protocol    = "HTTP"
   vpc_id             = module.jenkins_vpc.vpc_id
 
-  listener_port      = 80
+  listener_port      = var.jenkins_lb_listener_port
   listener_protocol  = "HTTP"
 
   targets = {
     jenkins_master = {
       id   = module.jenkins_master.instance_id
-      port = 8080
+      port = var.jenkins_lb_port
     }
   }
 
