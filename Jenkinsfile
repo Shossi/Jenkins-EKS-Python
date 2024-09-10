@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        aws eks update-kubeconfig --name <your-cluster-name> --region <your-region>
+                        aws eks update-kubeconfig --name eks-cluster-dev --region eu-central-1
                     """
                 }
             }
@@ -46,7 +46,6 @@ pipeline {
                     sh """
                         helm upgrade --install weather-app ./helm --set image.tag=${env.buildid}
                     """
-                    }
                 }
             }
         }
