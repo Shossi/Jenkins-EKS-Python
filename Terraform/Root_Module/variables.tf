@@ -128,11 +128,13 @@ variable "jenkins_lb_listener_port" {
 variable "eks_cluster_role_name" {
   description = "IAM Role for EKS Cluster"
   type        = string
+  default     = "eks-cluster-role"
 }
 
 variable "eks_node_group_role_name" {
   description = "IAM Role for EKS Node Group"
   type        = string
+  default     = "eks-node-group-role"
 }
 
 variable "vpc_peering_name" {
