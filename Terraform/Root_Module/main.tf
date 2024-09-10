@@ -109,6 +109,7 @@ module "jenkins_master" {
   security_group_id = module.jenkins_security_group.security_group_id
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
   key_name = aws_key_pair.deployer.key_name
+  associate_public_ip = false
 }
 
 module "jenkins_agent" {
@@ -120,6 +121,7 @@ module "jenkins_agent" {
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
   iam_instance_profile = aws_iam_instance_profile.this.name
   key_name = aws_key_pair.deployer.key_name
+  associate_public_ip = false
 }
 
 module "eks_cluster" {
