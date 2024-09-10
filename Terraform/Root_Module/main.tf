@@ -145,7 +145,7 @@ module "eks_node_group" {
   tags = {}
 }
 
-module "eks_addons" {
+module "eks_addon_vpc_cni" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "vpc-cni"
@@ -156,7 +156,7 @@ module "eks_addons" {
   }
 }
 
-module "eks_addons" {
+module "eks_addons_kube_proxy" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "kube-proxy"
@@ -167,7 +167,7 @@ module "eks_addons" {
   }
 }
 
-module "eks_addons" {
+module "eks_addons_coredns" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "coredns"

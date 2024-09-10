@@ -40,10 +40,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.auth.token
 }
 
-data "http" "ip" {
-  url = "https://ipv4.icanhazip.com"
-}
-
 variable "public_key_path" {
   description = "Path to the SSH public key"
   type        = string
