@@ -59,8 +59,9 @@ module "jenkins_security_group" {
   source = "../Modules/SecurityGroup"
   description = "Security Group for Jenkins"
   ingress_rules = [
-    { from_port = 22, to_port = 22, protocol = "tcp", security_groups = [module.bastion_security_group.security_group_id, module.jenkins_security_group.security_group_id] },
-    { from_port = 8080, to_port = 8080, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"]}
+    { from_port = 22, to_port = 22, protocol = "tcp", security_groups = [module.bastion_security_group.security_group_id] },
+    { from_port = 8080, to_port = 8080, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"]},
+    { from_port = 22, to_port = 22, protocol = "tcp", self = true }
   ]
   egress_rules = [
     { from_port = 0, to_port = 0, protocol = "-1", cidr_blocks = ["0.0.0.0/0"] }
