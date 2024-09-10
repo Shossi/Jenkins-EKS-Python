@@ -1,0 +1,33 @@
+replicaCount: 2
+
+image:
+  repository: yossizxc/weather
+  tag: 3.3.0.222
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 443
+  containerPort: 5000
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "1024Mi"
+    cpu: "500m"
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 5000
+  initialDelaySeconds: 15
+  periodSeconds: 20
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 5000
+  initialDelaySeconds: 5
+  periodSeconds: 10
