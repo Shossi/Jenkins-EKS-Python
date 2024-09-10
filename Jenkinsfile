@@ -22,8 +22,8 @@ pipeline {
                 script {
                     IMG_NAME = "${registry}:${env.buildid}"
                     echo "Image name: ${IMG_NAME}"
-                    sh "sudo docker tag pipeline_gunicorn:latest ${IMG_NAME}"
-                    docker.withRegistry("${REGISTRY_URL}", 'docker_id') {
+                    sh "sudo docker tag src-gunicorn:latest ${IMG_NAME}"
+                    docker.withRegistry("${REGISTRY_URL}", 'docker_creds') {
                         docker.image("${IMG_NAME}").push()
                     }
                 }
