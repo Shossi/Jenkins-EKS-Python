@@ -54,7 +54,7 @@ pipeline {
     post {
         always {
             cleanWs()
-            sh "docker rmi \$(docker images --filter 'dangling=true' -q --no-trunc)"
+            sh "docker rmi $(docker images --filter 'dangling=true' -q --no-trunc)"
             sh "docker system prune -af"
         }
     }
