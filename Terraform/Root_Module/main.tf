@@ -124,6 +124,7 @@ module "jenkins_agent" {
 
 module "eks_cluster" {
   source  = "../Modules/EKS/Cluster"
+  depends_on = [module.eks_cluster_role]
   cluster_name        = var.cluster_name
   cluster_role_arn    = module.eks_cluster_role.role_arn
   subnet_ids          = module.eks_vpc.private_subnet_ids
@@ -137,6 +138,7 @@ module "eks_cluster" {
 
 module "eks_node_group" {
   source  = "../Modules/EKS/NodeGroup"
+  depends_on = [module.eks_node_group_role]
   cluster_name        = module.eks_cluster.cluster_id
   node_group_name     = var.node_group_name
   node_role_arn       = module.eks_node_group_role.role_arn
@@ -240,7 +242,8 @@ module "eks_node_group_role" {
   })
   policy_arns = [
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   ]
 }
 
