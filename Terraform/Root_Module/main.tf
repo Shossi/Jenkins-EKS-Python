@@ -49,7 +49,7 @@ module "eks_security_group" {
     { from_port = 1025, to_port = 65535, protocol = "tcp", cidr_blocks = [module.eks_vpc.cidr_block] }
   ]
   egress_rules = [
-    { from_port = 0, to_port = 0, cidr_blocks = ["0.0.0.0/0"] }
+    { from_port = 0, to_port = 0, protocol = "-1", cidr_blocks = ["0.0.0.0/0"] }
   ]
   name = "EKS-SG"
   vpc_id = module.eks_vpc.vpc_id
@@ -59,8 +59,8 @@ module "jenkins_security_group" {
   source = "../Modules/SecurityGroup"
   description = "Security Group for Jenkins"
   ingress_rules = [
-    { from_port = 22, to_port = 22, security_groups = [module.bastion_security_group.security_group_id] },
-    { from_port = 8080, to_port = 8080 }
+    { from_port = 22, to_port = 22, protocol = "tcp", security_groups = [module.bastion_security_group.security_group_id] },
+    { from_port = 8080, to_port = 8080, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"]}
   ]
   egress_rules = [
     { from_port = 0, to_port = 0, cidr_blocks = ["0.0.0.0/0"] }
@@ -73,10 +73,10 @@ module "bastion_security_group" {
   source = "../Modules/SecurityGroup"
   description = "Security group for the Bastion Host."
   ingress_rules = [
-    { from_port = 22, to_port = 22, cidr_blocks = ["${chomp(data.http.ip.response_body)}/32"] }
+    { from_port = 22, to_port = 22, protocol = "tcp", cidr_blocks = ["${chomp(data.http.ip.response_body)}/32"] }
   ]
   egress_rules = [
-    { from_port = 0, to_port = 0, cidr_blocks = ["0.0.0.0/0"] }
+    { from_port = 0, to_port = 0, protocol = "-1", cidr_blocks = ["0.0.0.0/0"] }
   ]
   name = "Bastion-sg"
   vpc_id = module.jenkins_vpc.vpc_id
