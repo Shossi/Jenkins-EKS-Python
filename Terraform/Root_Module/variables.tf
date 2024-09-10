@@ -56,11 +56,6 @@ variable "bastion_ami" {
   type        = string
 }
 
-variable "key_name" {
-  description = "SSH Key Pair Name"
-  type        = string
-}
-
 variable "cluster_name" {
   description = "EKS Cluster Name"
   type        = string
@@ -87,24 +82,6 @@ variable "max_size" {
   description = "Maximum size of the EKS node group"
   type        = number
   default     = 3
-}
-
-variable "vpc_cni_version" {
-  description = "Version for VPC CNI Addon"
-  type        = string
-  default     = "v1.12.0"
-}
-
-variable "kube_proxy_version" {
-  description = "Version for kube-proxy Addon"
-  type        = string
-  default     = "v1.27.0"
-}
-
-variable "coredns_version" {
-  description = "Version for CoreDNS Addon"
-  type        = string
-  default     = "v1.8.7"
 }
 
 variable "jenkins_lb_name" {

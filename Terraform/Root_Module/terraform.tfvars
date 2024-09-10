@@ -12,7 +12,5 @@ jenkins_ami              = "ami-0e04bcbe83a83792e"
 jenkins_agent_ami        = "ami-0e04bcbe83a83792e"
 bastion_ami              = "ami-0e04bcbe83a83792e"
 
-key_name                 = "my-ssh-key"
-
 cluster_name             = "eks-cluster-dev"
 node_group_name          = "eks-node-group-dev"

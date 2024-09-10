@@ -15,3 +15,7 @@ output "cluster_auth" {
 output "cluster_name"{
   value = var.cluster_name
 }
+
+output "eks_version" {
+  value = aws_eks_cluster.eks_cluster.version
+}

@@ -86,6 +86,11 @@ data "http" "ip" {
   url = "https://ipv4.icanhazip.com"
 }
 
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key"
+  public_key = file(var.public_key_path)
+}
+
 module "bastion_host" {
   source = "../Modules/EC2"
   ami    = var.bastion_ami
@@ -93,6 +98,7 @@ module "bastion_host" {
   instance_type = "t2.micro"
   security_group_id = module.bastion_security_group.security_group_id
   subnet_id = module.jenkins_vpc.public_subnet_ids[0]
+  key_name = aws_key_pair.deployer.key_name
 }
 
 module "jenkins_master" {
@@ -102,7 +108,7 @@ module "jenkins_master" {
   instance_type = "t3.large"
   security_group_id = module.jenkins_security_group.security_group_id
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
-  key_name = var.key_name
+  key_name = aws_key_pair.deployer.key_name
 }
 
 module "jenkins_agent" {
@@ -113,7 +119,7 @@ module "jenkins_agent" {
   security_group_id = module.jenkins_security_group.security_group_id
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
   iam_instance_profile = aws_iam_instance_profile.this.name
-  key_name = var.key_name
+  key_name = aws_key_pair.deployer.key_name
 }
 
 module "eks_cluster" {
@@ -146,7 +152,7 @@ module "eks_addon_vpc_cni" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "vpc-cni"
-  addon_version   = var.vpc_cni_version
+  k8s_version = module.eks_cluster.eks_version
 
   tags = {
     Environment = var.environment
@@ -157,7 +163,7 @@ module "eks_addons_kube_proxy" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "kube-proxy"
-  addon_version   = var.kube_proxy_version
+  k8s_version = module.eks_cluster.eks_version
 
   tags = {
     Environment = var.environment
@@ -168,7 +174,7 @@ module "eks_addons_coredns" {
   source  = "../Modules/EKS/Addon"
   cluster_name    = module.eks_cluster.cluster_id
   addon_name      = "coredns"
-  addon_version   = var.coredns_version
+  k8s_version = module.eks_cluster.eks_version
 
   tags = {
     Environment = var.environment
@@ -265,3 +271,4 @@ module "jenkins_lb" {
     Environment = var.environment
   }
 }
+

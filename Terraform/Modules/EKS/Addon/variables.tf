@@ -8,13 +8,13 @@ variable "addon_name" {
   type        = string
 }
 
-variable "addon_version" {
-  description = "Version of the add-on"
-  type        = string
-}
-
 variable "tags" {
   description = "Tags for the add-on resources"
   type        = map(string)
   default     = {}
+}
+
+variable "k8s_version" {
+  description = "k8s version used to get latest addon version"
+  type = string
 }
