@@ -69,19 +69,19 @@ variable "node_group_name" {
 variable "desired_size" {
   description = "Desired size of the EKS node group"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "min_size" {
   description = "Minimum size of the EKS node group"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "max_size" {
   description = "Maximum size of the EKS node group"
   type        = number
-  default     = 3
+  default     = 5
 }
 
 variable "jenkins_lb_name" {
