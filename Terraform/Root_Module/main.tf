@@ -112,7 +112,7 @@ module "jenkins_agent" {
   instance_type = "t2.micro"
   security_group_id = module.jenkins_security_group.security_group_id
   subnet_id = module.jenkins_vpc.private_subnet_ids[0]
-  iam_role = module.jenkins_agent_role.role_arn
+  iam_instance_profile = aws_iam_instance_profile.this.name
   key_name = var.key_name
 }
 
@@ -193,6 +193,12 @@ module "jenkins_agent_role" {
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   ]
 }
+
+resource "aws_iam_instance_profile" "this" {
+  name = "${module.jenkins_agent_role.role_name}-profile"
+  role = module.jenkins_agent_role.role_name
+}
+
 
 module "eks_cluster_role" {
   source  = "../Modules/Roles"
