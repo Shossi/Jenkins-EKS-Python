@@ -63,7 +63,7 @@ module "jenkins_security_group" {
     { from_port = 8080, to_port = 8080, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"]}
   ]
   egress_rules = [
-    { from_port = 0, to_port = 0, cidr_blocks = ["0.0.0.0/0"] }
+    { from_port = 0, to_port = 0, protocol = "-1", cidr_blocks = ["0.0.0.0/0"] }
   ]
   name = "Jenkins-SG"
   vpc_id = module.jenkins_vpc.vpc_id
