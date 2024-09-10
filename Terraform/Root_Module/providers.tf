@@ -40,11 +40,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.auth.token
 }
 
-variable "public_key_path" {
-  description = "Path to the SSH public key"
-  type        = string
-  default     = "/home/yossi/.ssh/new_key.pub"
-}
 
 data "aws_eks_cluster_auth" "auth" {
   name = module.eks_cluster.cluster_name

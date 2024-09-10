@@ -99,7 +99,7 @@ variable "jenkins_lb_port" {
 variable "jenkins_lb_listener_port" {
   description = "Listener port for Jenkins Load Balancer"
   type        = number
-  default     = 80
+  default     = 8080
 }
 
 variable "eks_cluster_role_name" {
@@ -118,4 +118,10 @@ variable "vpc_peering_name" {
   description = "Name of the VPC peering connection"
   type        = string
   default     = "jenkins-to-eks"
+}
+
+variable "public_key_path" {
+  description = "Path to the SSH public key"
+  type        = string
+  default     = "/home/yossi/.ssh/new_key.pub"
 }
