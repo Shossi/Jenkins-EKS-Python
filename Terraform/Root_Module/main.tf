@@ -299,3 +299,31 @@ module "jenkins_lb" {
   }
 }
 
+module "nginx_ingress_controller" {
+  source = "../Modules/EKS/Helm"
+  depends_on = [module.eks_cluster]
+  name             = "nginx-ingress"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  vers             = "4.11.0"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+
+  set = {
+    "controller.service.type"    = "LoadBalancer"
+    "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-backend-protocol" = "http"
+#    "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type" = "nlb"
+    "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"        = "443"
+    "controller.admissionWebhooks.enabled" = "false"
+  }
+}
+
+module "argocd" {
+  source     = "../Modules/EKS/Helm"
+  depends_on = [module.eks_cluster]
+  name       = "argocd"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  vers       = "4.5.2"
+  namespace  = "argocd"
+}

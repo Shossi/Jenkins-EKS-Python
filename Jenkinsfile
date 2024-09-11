@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        helm upgrade --install weather-app ./helm --set image.tag=${env.buildid}
+                        helm upgrade --install weather-app ./helm-chart --set image.tag=${env.buildid}
                     """
                 }
             }
