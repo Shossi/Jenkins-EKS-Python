@@ -33,24 +33,22 @@ pipeline {
         stage('Configure Kubectl') {
             steps {
                 script {
-                    sh """
-                        aws eks update-kubeconfig --name eks-cluster-dev --region eu-central-1
-                    """
+                    sh "git clone ${GIT_REPO_URL}"
+                    dir('Weather-Chart') {
+                        sh 'git checkout main'
+                        withCredentials([string(credentialsId: 'GIT_CREDENTIALS_ID', variable: 'TOKEN')]) {
+                            sh """
+                                sed -i 's|tag: .*|tag: ${env.buildid}|' values.yaml
+                                git config user.email "jenkins@yourdomain.com"
+                                git config user.name "Jenkins"
+                                git add values.yaml
+                                git commit -m "Update image tag to ${NEXT_VERSION}.${env.buildid}"
+                                git push https://${TOKEN}@github.com/Shossi/Leumi-Kubernets.git main
+                            """
+                        }
+                    }
                 }
             }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sh """
-                        helm upgrade --install weather-app ./helm-chart --set image.tag=${env.buildid}
-                    """
-                }
-            }
-        }
-    }
-
     post {
         always {
             cleanWs()
