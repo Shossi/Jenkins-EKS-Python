@@ -4,11 +4,6 @@ variable "associate_eip" {
   default     = true # Default to true to assign an EIP
 }
 
-variable "ami" {
-  description = "Linux AMI ID for Apache Server"
-  type        = string
-}
-
 variable "associate_public_ip" {
   description = "Whether to associate a public IP"
   type        = bool
@@ -36,3 +31,5 @@ variable "apache_vpc_cidr" {
   type        = string
   default     = "10.10.0.0/16"
 }
+apache_public_subnets  = ["10.10.1.0/24", "10.10.2.0/24"]
+apache_private_subnets = ["10.10.3.0/24", "10.10.4.0/24"]
