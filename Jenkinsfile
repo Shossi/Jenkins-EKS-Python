@@ -31,7 +31,7 @@ pipeline {
             }
         }
 
-        stage('Configure Kubectl') {
+        stage('push changes') {
             steps {
                 script {
                     sh "git clone ${GIT_REPO_URL}"
@@ -43,7 +43,7 @@ pipeline {
                                 git config user.email "jenkins@yourdomain.com"
                                 git config user.name "Jenkins"
                                 git add values.yaml
-                                git commit -m "Update image tag to ${NEXT_VERSION}.${env.buildid}"
+                                git commit -m "Update image tag to ${env.buildid}"
                                 git push https://${TOKEN}@github.com/Shossi/Leumi-Kubernets.git main
                             """
                         }
