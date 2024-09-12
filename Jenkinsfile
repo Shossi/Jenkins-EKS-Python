@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+        GIT_REPO_URL = "https://github.com/Shossi/Leumi-Kubernets"
         buildid = "${currentBuild.number}"
         registry = "yossizxc/weather"
         IMG_NAME = ""
@@ -49,6 +50,8 @@ pipeline {
                     }
                 }
             }
+        }
+    }
     post {
         always {
             cleanWs()
