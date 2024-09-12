@@ -13,11 +13,13 @@ variable "associate_public_ip" {
 variable "apache_public_subnets" {
   description = "Public subnets for apache"
   type        = list(string)
+  default = ["10.10.1.0/24", "10.10.2.0/24"]
 }
 
 variable "apache_private_subnets" {
   description = "Private subnets for apache"
   type        = list(string)
+  default = ["10.10.3.0/24", "10.10.4.0/24"]
 }
 
 variable "azs" {
@@ -31,5 +33,3 @@ variable "apache_vpc_cidr" {
   type        = string
   default     = "10.10.0.0/16"
 }
-apache_public_subnets  = ["10.10.1.0/24", "10.10.2.0/24"]
-apache_private_subnets = ["10.10.3.0/24", "10.10.4.0/24"]
