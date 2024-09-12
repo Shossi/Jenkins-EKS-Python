@@ -1,9 +1,9 @@
 resource "aws_lb" "this" {
-  name               = var.lb_name
-  internal           = var.internal
-  load_balancer_type = var.load_balancer_type
-  subnets            = var.subnets
-  security_groups    = var.load_balancer_type == "application" ? var.security_groups : null
+  name                       = var.lb_name
+  internal                   = var.internal
+  load_balancer_type         = var.load_balancer_type
+  subnets                    = var.subnets
+  security_groups            = var.load_balancer_type == "application" ? var.security_groups : null
   enable_deletion_protection = var.enable_deletion_protection
 
   tags = merge(var.tags, { Name = var.lb_name })

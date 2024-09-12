@@ -12,7 +12,7 @@ output "cluster_auth" {
   value = aws_eks_cluster.eks_cluster.certificate_authority
 }
 
-output "cluster_name"{
+output "cluster_name" {
   value = var.cluster_name
 }
 

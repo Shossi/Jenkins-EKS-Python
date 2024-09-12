@@ -16,5 +16,5 @@ variable "tags" {
 
 variable "k8s_version" {
   description = "k8s version used to get latest addon version"
-  type = string
+  type        = string
 }

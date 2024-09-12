@@ -18,10 +18,10 @@ resource "aws_subnet" "public_subnets" {
 }
 
 resource "aws_subnet" "private_subnets" {
-  count             = length(var.private_subnets)
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = element(var.private_subnets, count.index)
-  availability_zone = element(var.azs, count.index)
+  count                   = length(var.private_subnets)
+  vpc_id                  = aws_vpc.this.id
+  cidr_block              = element(var.private_subnets, count.index)
+  availability_zone       = element(var.azs, count.index)
   map_public_ip_on_launch = false
 
   tags = {
@@ -50,7 +50,7 @@ resource "aws_nat_gateway" "this" {
 resource "aws_eip" "this" {
   count = length(aws_subnet.public_subnets)
   vpc   = true
-  tags  = {
+  tags = {
     Name = format("%s-eip-%d", var.vpc_name, count.index)
   }
 }

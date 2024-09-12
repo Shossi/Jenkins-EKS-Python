@@ -14,6 +14,6 @@ resource "aws_instance" "this" {
 }
 
 resource "aws_eip" "this" {
-  count = var.associate_eip ? 1 : 0
+  count    = var.associate_eip ? 1 : 0
   instance = aws_instance.this.id
 }

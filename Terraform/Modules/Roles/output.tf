@@ -5,5 +5,5 @@ output "role_arn" {
 
 output "role_name" {
   description = "Name of the IAM role"
-  value = aws_iam_role.this.name
+  value       = aws_iam_role.this.name
 }

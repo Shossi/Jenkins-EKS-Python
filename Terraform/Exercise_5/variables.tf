@@ -1,7 +1,7 @@
 variable "associate_eip" {
   description = "Control whether an Elastic IP should be associated with the instance"
   type        = bool
-  default     = true  # Default to true to assign an EIP
+  default     = true # Default to true to assign an EIP
 }
 
 variable "ami" {

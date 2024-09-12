@@ -1,0 +1,8 @@
+#!/bin/bash
+
+terraform fmt -recursive
+
+if [ $? -ne 0 ]; then
+  echo "Terraform files are not properly formatted. Please run 'terraform fmt' and try again."
+  exit 1
+fi
