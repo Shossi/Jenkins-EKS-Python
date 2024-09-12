@@ -45,39 +45,40 @@ resource "aws_key_pair" "deployer" {
 }
 
 module "bastion_host" {
-  source = "../Modules/EC2"
-  ami    = var.bastion_ami
-  instance_name = "Bastion"
-  instance_type = "t2.micro"
-  security_group_id = module.bastion_security_group.security_group_id
-  subnet_id = module.jenkins_vpc.public_subnet_ids[0]
-  key_name = aws_key_pair.deployer.key_name
+  source             = "../Modules/EC2"
+  ami                = var.bastion_ami
+  instance_name      = "Bastion"
+  instance_type      = var.bastion_instance_type
+  security_group_id  = module.bastion_security_group.security_group_id
+  subnet_id          = module.jenkins_vpc.public_subnet_ids[0]
+  key_name           = aws_key_pair.deployer.key_name
 }
 
 module "jenkins_master" {
-  source = "../Modules/EC2"
-  ami    = var.jenkins_ami
-  instance_name = "Jenk-Master"
-  instance_type = "t3.large"
-  security_group_id = module.jenkins_security_group.security_group_id
-  subnet_id = module.jenkins_vpc.private_subnet_ids[0]
-  key_name = aws_key_pair.deployer.key_name
+  source             = "../Modules/EC2"
+  ami                = var.jenkins_ami
+  instance_name      = "Jenk-Master"
+  instance_type      = var.jenkins_master_instance_type
+  security_group_id  = module.jenkins_security_group.security_group_id
+  subnet_id          = module.jenkins_vpc.private_subnet_ids[0]
+  key_name           = aws_key_pair.deployer.key_name
   associate_public_ip = false
 }
 
+
 module "jenkins_agent" {
-  source = "../Modules/EC2"
-  ami    = var.jenkins_agent_ami
-  instance_name = "Jenk-Agent"
-  instance_type = "t2.micro"
-  security_group_id = module.jenkins_security_group.security_group_id
-  subnet_id = module.jenkins_vpc.private_subnet_ids[0]
-  key_name = aws_key_pair.deployer.key_name
+  source             = "../Modules/EC2"
+  ami                = var.jenkins_agent_ami
+  instance_name      = "Jenk-Agent"
+  instance_type      = var.jenkins_agent_instance_type
+  security_group_id  = module.jenkins_security_group.security_group_id
+  subnet_id          = module.jenkins_vpc.private_subnet_ids[0]
+  key_name           = aws_key_pair.deployer.key_name
   associate_public_ip = false
 }
 
 module "jenkins_lb" {
-  source = "../Modules/LoadBalancer"
+  source             = "../Modules/LoadBalancer"
   lb_name            = var.jenkins_lb_name
   load_balancer_type = "application"
   internal           = false
@@ -86,11 +87,11 @@ module "jenkins_lb" {
 
   target_group_name  = "jenkins-tg"
   target_port        = var.jenkins_lb_port
-  target_protocol    = "HTTP"
+  target_protocol    = var.jenkins_lb_protocol
   vpc_id             = module.jenkins_vpc.vpc_id
 
   listener_port      = var.jenkins_lb_listener_port
-  listener_protocol  = "HTTP"
+  listener_protocol  = var.jenkins_lb_protocol
 
   targets = {
     jenkins_master = {
@@ -103,3 +104,4 @@ module "jenkins_lb" {
     Environment = var.environment
   }
 }
+

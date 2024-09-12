@@ -119,3 +119,31 @@ variable "public_key_path" {
   type        = string
   default     = "/home/yossi/.ssh/new_key.pub"
 }
+
+variable "jenkins_master_instance_type" {
+  description = "Instance type for Jenkins master"
+  type        = string
+  default     = "t3.large"
+}
+
+variable "jenkins_agent_instance_type" {
+  description = "Instance type for Jenkins agent"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "bastion_instance_type" {
+  description = "Instance type for Bastion host"
+  type        = string
+  default     = "t2.micro"
+}
+
+
+
+variable "jenkins_lb_protocol" {
+  description = "Load balancer protocol for Jenkins"
+  type        = string
+  default     = "HTTP"
+}
+
+
