@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GIT_REPO_URL = "https://github.com/Shossi/Leumi-Kubernets"
+        GIT_REPO_URL = "https://github.com/Shossi/Leumi-Kubernetes"
         buildid = "${currentBuild.number}"
         registry = "yossizxc/weather"
         IMG_NAME = ""
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     sh "git clone ${GIT_REPO_URL}"
-                    dir('Weather-Chart') {
+                    dir('Leumi-Kubernetes') {
                         sh 'git checkout main'
                         withCredentials([string(credentialsId: 'GIT_CREDENTIALS_ID', variable: 'TOKEN')]) {
                             sh """
