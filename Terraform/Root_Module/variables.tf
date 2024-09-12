@@ -114,12 +114,6 @@ variable "eks_node_group_role_name" {
   default     = "eks-node-group-role"
 }
 
-variable "vpc_peering_name" {
-  description = "Name of the VPC peering connection"
-  type        = string
-  default     = "jenkins-to-eks"
-}
-
 variable "public_key_path" {
   description = "Path to the SSH public key"
   type        = string

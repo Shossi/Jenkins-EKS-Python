@@ -52,3 +52,8 @@ variable "iam_instance_profile" {
   type        = string
   default     = null
 }
+
+variable "associate_eip" {
+  type    = bool
+  default = false
+}

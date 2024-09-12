@@ -12,3 +12,8 @@ resource "aws_instance" "this" {
 
   iam_instance_profile = var.iam_instance_profile
 }
+
+resource "aws_eip" "this" {
+  count = var.associate_eip ? 1 : 0
+  instance = aws_instance.this.id
+}
