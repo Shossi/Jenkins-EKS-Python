@@ -312,7 +312,7 @@ module "nginx_ingress_controller" {
   set = {
     "controller.service.type"    = "LoadBalancer"
     "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-backend-protocol" = "http"
-#    "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type" = "nlb"
+    "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type" = "nlb"
     "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"        = "443"
     "controller.admissionWebhooks.enabled" = "false"
   }
