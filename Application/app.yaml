@@ -7,9 +7,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Shossi/Jenkins-EKS-Python'
+    repoURL: 'https://github.com/Shossi/Leumi-Kubernets'
     targetRevision: HEAD
-    path: 'helm-chart'
+    path: '.'
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: weather
