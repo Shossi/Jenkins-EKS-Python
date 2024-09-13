@@ -26,12 +26,12 @@
 
 At the beginning of the project, I focused on carefully scoping the infrastructure requirements to ensure I could meet the assignment’s objectives effectively. After analyzing the needs, I concluded that the infrastructure should be divided into two distinct VPCs to ensure network isolation:
 
-- **VPC 1**: For Supply Chain resources, which include non-cluster components like Jenkins.
+- **VPC 1**: For CI environment resources, which include non-cluster components like Jenkins.
 - **VPC 2**: For the Kubernetes (EKS) cluster, where the Python application would be deployed.
 
 From there, I mapped out the key components and the Terraform modules I would need to create:
 
-1. **VPC Modules**: Separate VPCs for the EKS cluster and Supply Chain.
+1. **VPC Modules**: Separate VPCs for the EKS cluster and the CI environment.
 2. **Instance Modules**: Jenkins Master and Jenkins Agent, each deployed on its own EC2 instance.
 3. **Security Group Modules**: Tailored security groups for each instance to manage ingress and egress rules.
 4. **EKS Module**: A fully managed Kubernetes cluster for the application’s deployment.
@@ -98,7 +98,7 @@ Implementing ArgoCD solved this problem by automating the deployment and managem
 The infrastructure is designed for flexibility, security, and scalability, broken into the following key components:
 
 1. **Two VPCs**:
-    - **VPC 1** (Supply Chain): Dedicated for non-cluster resources such as Jenkins Master, Jenkins Agent, and the bastion host. Contains both public and private subnets.
+    - **VPC 1** (CI environment): Dedicated for non-cluster resources such as Jenkins Master, Jenkins Agent, and the bastion host. Contains both public and private subnets.
     - **VPC 2** (Kubernetes Cluster): Dedicated for the EKS cluster, ensuring logical isolation from non-cluster resources. Contains subnets for public and private access to the cluster.
 
 2. **EC2 Instances**:
