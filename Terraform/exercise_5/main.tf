@@ -1,5 +1,5 @@
 module "apache_vpc" {
-  source          = "../Modules/VPC"
+  source          = "../modules/vpc"
   vpc_name        = "apache-vpc"
   cidr            = var.apache_vpc_cidr
   azs             = var.azs
@@ -8,7 +8,7 @@ module "apache_vpc" {
 }
 
 module "apache_Sec_group" {
-  source      = "../Modules/SecurityGroup"
+  source      = "../modules/securitygroup"
   description = "Security Group for Apache"
   ingress_rules = [
     { from_port = 80, to_port = 80, protocol = "tcp", cidr_blocks = ["91.231.246.50/32"] },
@@ -22,7 +22,7 @@ module "apache_Sec_group" {
 }
 
 module "apache_instance" {
-  source            = "../Modules/EC2"
+  source            = "../modules/ec2"
   ami               = "ami-0b6c6d3707776c98d"
   instance_name     = "Apache-Server"
   instance_type     = "t2.micro"

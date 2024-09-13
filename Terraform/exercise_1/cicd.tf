@@ -1,5 +1,5 @@
 module "jenkins_vpc" {
-  source          = "../Modules/VPC"
+  source          = "../modules/vpc"
   vpc_name        = "jenkins-vpc"
   cidr            = var.jenkins_vpc_cidr
   azs             = var.azs
@@ -8,7 +8,7 @@ module "jenkins_vpc" {
 }
 
 module "jenkins_security_group" {
-  source      = "../Modules/SecurityGroup"
+  source      = "../modules/securitygroup"
   description = "Security Group for Jenkins"
   ingress_rules = [
     { from_port = 22, to_port = 22, protocol = "tcp", security_groups = [module.bastion_security_group.security_group_id] },
@@ -23,7 +23,7 @@ module "jenkins_security_group" {
 }
 
 module "bastion_security_group" {
-  source      = "../Modules/SecurityGroup"
+  source      = "../modules/securitygroup"
   description = "Security group for the Bastion Host."
   ingress_rules = [
     { from_port = 22, to_port = 22, protocol = "tcp", cidr_blocks = ["${chomp(data.http.ip.response_body)}/32"] }
@@ -45,7 +45,7 @@ resource "aws_key_pair" "deployer" {
 }
 
 module "bastion_host" {
-  source            = "../Modules/EC2"
+  source            = "../modules/ec2"
   ami               = var.bastion_ami
   instance_name     = "Bastion"
   instance_type     = var.bastion_instance_type
@@ -55,7 +55,7 @@ module "bastion_host" {
 }
 
 module "jenkins_master" {
-  source              = "../Modules/EC2"
+  source              = "../modules/ec2"
   ami                 = var.jenkins_ami
   instance_name       = "Jenk-Master"
   instance_type       = var.jenkins_master_instance_type
@@ -67,7 +67,7 @@ module "jenkins_master" {
 
 
 module "jenkins_agent" {
-  source              = "../Modules/EC2"
+  source              = "../modules/ec2"
   ami                 = var.jenkins_agent_ami
   instance_name       = "Jenk-Agent"
   instance_type       = var.jenkins_agent_instance_type
@@ -78,7 +78,7 @@ module "jenkins_agent" {
 }
 
 module "jenkins_lb" {
-  source             = "../Modules/LoadBalancer"
+  source             = "../modules/loadbalancer"
   lb_name            = var.jenkins_lb_name
   load_balancer_type = "application"
   internal           = false

@@ -1,6 +1,6 @@
 
 module "eks_vpc" {
-  source          = "../Modules/VPC"
+  source          = "../modules/vpc"
   vpc_name        = "eks-vpc"
   cidr            = var.eks_vpc_cidr
   azs             = var.azs
@@ -9,7 +9,7 @@ module "eks_vpc" {
 }
 
 module "eks_security_group" {
-  source      = "../Modules/SecurityGroup"
+  source      = "../modules/securitygroup"
   description = "Security Group for EKS"
   ingress_rules = [
     { from_port = 443, to_port = 443, protocol = "tcp", cidr_blocks = [module.eks_vpc.cidr_block] },
@@ -23,7 +23,7 @@ module "eks_security_group" {
 }
 
 module "eks_cluster" {
-  source                  = "../Modules/EKS/Cluster"
+  source                  = "../modules/eks/cluster"
   depends_on              = [module.eks_cluster_role]
   cluster_name            = var.cluster_name
   cluster_role_arn        = module.eks_cluster_role.role_arn
@@ -37,7 +37,7 @@ module "eks_cluster" {
 }
 
 module "eks_node_group" {
-  source          = "../Modules/EKS/NodeGroup"
+  source          = "../modules/eks/nodegroup"
   depends_on      = [module.eks_node_group_role]
   cluster_name    = module.eks_cluster.cluster_id
   node_group_name = var.node_group_name
@@ -51,7 +51,7 @@ module "eks_node_group" {
 }
 
 module "eks_addon_vpc_cni" {
-  source       = "../Modules/EKS/Addon"
+  source       = "../modules/eks/addon"
   depends_on   = [module.eks_node_group]
   cluster_name = module.eks_cluster.cluster_id
   addon_name   = "vpc-cni"
@@ -63,7 +63,7 @@ module "eks_addon_vpc_cni" {
 }
 
 module "eks_addons_kube_proxy" {
-  source       = "../Modules/EKS/Addon"
+  source       = "../modules/eks/addon"
   depends_on   = [module.eks_node_group]
   cluster_name = module.eks_cluster.cluster_id
   addon_name   = "kube-proxy"
@@ -75,7 +75,7 @@ module "eks_addons_kube_proxy" {
 }
 
 module "eks_addons_coredns" {
-  source       = "../Modules/EKS/Addon"
+  source       = "../modules/eks/addon"
   depends_on   = [module.eks_node_group]
   cluster_name = module.eks_cluster.cluster_id
   addon_name   = "coredns"
@@ -87,7 +87,7 @@ module "eks_addons_coredns" {
 }
 
 module "eks_cluster_role" {
-  source    = "../Modules/Roles"
+  source    = "../modules/roles"
   role_name = "eks-cluster-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -106,7 +106,7 @@ module "eks_cluster_role" {
 }
 
 module "eks_node_group_role" {
-  source    = "../Modules/Roles"
+  source    = "../modules/roles"
   role_name = "eks-node-group-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -126,7 +126,7 @@ module "eks_node_group_role" {
 }
 
 module "nginx_ingress_controller" {
-  source           = "../Modules/EKS/Helm"
+  source           = "../modules/eks/helm"
   depends_on       = [module.eks_cluster]
   name             = "nginx-ingress"
   repository       = "https://kubernetes.github.io/ingress-nginx"
@@ -145,7 +145,7 @@ module "nginx_ingress_controller" {
 }
 
 module "argocd" {
-  source     = "../Modules/EKS/Helm"
+  source     = "../modules/eks/helm"
   depends_on = [module.eks_cluster]
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"

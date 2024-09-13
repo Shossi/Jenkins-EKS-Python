@@ -20,7 +20,7 @@
 
 ---
 
-![Architecture Diagram](./Architecture.png)
+![Architecture Diagram](./architecture.png)
 
 ## Approach to Part 1: Home Assignment
 
@@ -41,8 +41,6 @@ From there, I mapped out the key components and the Terraform modules I would ne
 With this approach, I ensured modularity and scalability, allowing for flexibility in future adjustments to the infrastructure.
 
 ---
-
-This should make your approach much clearer, and the diagram will enhance the reader’s understanding of the infrastructure. Would you like help with creating the detailed content for the diagram?
 
 ### Prerequisites
 
@@ -124,7 +122,7 @@ The infrastructure is designed for flexibility, security, and scalability, broke
     - Roles are created for the EKS cluster, nodes, and Jenkins components, ensuring least privilege access is maintained throughout the infrastructure.
 
 More information can be found in the corresponding Terraform module readme files:
-- [Exercise 1 Readme](./Terraform/Root_Module/readme.md)
+- [Exercise 1 Readme](Terraform/exercise_1/readme.md)
 
 ---
 
@@ -137,7 +135,7 @@ For Exercise 5, the goal was to write a Terraform file to create a Linux-based E
 3. Include a security group that allows access only from Leumi Proxy's IP address (91.231.246.50).
 
 More information can be found in the corresponding Terraform module readme files:
-- [Exercise 5 Readme](./Terraform/Exercise_5/readme.md)
+- [Exercise 5 Readme](Terraform/exercise_5/readme.md)
 
 ---
 
