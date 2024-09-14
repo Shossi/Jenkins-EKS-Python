@@ -122,9 +122,28 @@ module "eks_node_group_role" {
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/SecretsManagerReadOnly",
+    aws_iam_policy.secretsmanager_readonly.arn,
     "arn:aws:iam::aws:policy/AutoScalingFullAccess"
   ]
+}
+
+resource "aws_iam_policy" "secretsmanager_readonly" {
+  name        = "SecretsManagerReadOnlyCustom"
+  description = "Read-only access to AWS Secrets Manager"
+  policy      = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:ListSecrets"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 module "nginx_ingress_controller" {
