@@ -121,7 +121,9 @@ module "eks_node_group_role" {
   policy_arns = [
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/SecretsManagerReadOnly",
+    "arn:aws:iam::aws:policy/AutoScalingFullAccess"
   ]
 }
 
@@ -152,4 +154,31 @@ module "argocd" {
   chart      = "argo-cd"
   vers       = "4.5.2"
   namespace  = "argocd"
+}
+
+module "secrets_csi_driver" {
+  source = "../modules/eks/helm"
+  depends_on = [module.eks_cluster]
+  name   = "secrets-store"
+  repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
+  chart  = "secrets-store-csi-driver"
+  vers = "1.4.4"
+  namespace = "kube-system"
+  set = {
+    "syncSecret.enabled" = "true"
+  }
+}
+
+module "cluster_autoscaler" {
+  source     = "../modules/eks/helm"
+  depends_on = [module.eks_cluster]
+  name       = "cluster-autoscaler"
+  repository = "https://kubernetes.github.io/autoscaler"
+  chart      = "cluster-autoscaler"
+  vers       = "9.36.0"
+  namespace  = "kube-system"
+  set = {
+    "autoDiscovery.clusterName" = module.eks_cluster.cluster_name
+    "awsRegion" = "eu-west-3"
+  }
 }
