@@ -8,6 +8,10 @@ def signup(username, password):
     :param password: password sent from html signup form
     :return: returns True if user wasn't already signed up and False if otherwise/
     """
+    if not os.path.exists('test.json'):
+        with open('test.json', 'w') as file:
+            json.dump({}, file)
+
     with open('test.json', 'r+') as file:
         db = json.load(file)
         if username in db:
