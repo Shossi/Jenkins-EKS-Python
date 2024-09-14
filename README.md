@@ -71,7 +71,7 @@ The assignment required creating a Jenkins process based on a declarative Jenkin
 
 A full CI/CD pipeline was implemented using Jenkins and Docker. The pipeline automates the process of building a Docker image for the Python application, pushing it to Docker Hub, and then updating the Kubernetes deployment by modifying the `values.yaml` file in the corresponding GitHub repository.
 
-![Pipeline Diagram](./Pipeline.png)
+![Pipeline Diagram](./pipeline.png)
 
 Additionally, a certificate was added for HTTPS, created using the following OpenSSL command:
 
