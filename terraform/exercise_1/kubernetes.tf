@@ -127,25 +127,6 @@ module "eks_node_group_role" {
   ]
 }
 
-resource "aws_iam_policy" "secretsmanager_readonly" {
-  name        = "SecretsManagerReadOnlyCustom"
-  description = "Read-only access to AWS Secrets Manager"
-  policy      = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect   = "Allow",
-        Action   = [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret",
-          "secretsmanager:ListSecrets"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
-
 module "nginx_ingress_controller" {
   source           = "../modules/eks/helm"
   depends_on       = [module.eks_cluster]

@@ -75,6 +75,7 @@ module "jenkins_agent" {
   subnet_id           = module.jenkins_vpc.private_subnet_ids[0]
   key_name            = aws_key_pair.deployer.key_name
   associate_public_ip = false
+  iam_instance_profile = aws_iam_instance_profile.jenkins_agent_instance_profile.name
 }
 
 module "jenkins_lb" {
@@ -105,3 +106,25 @@ module "jenkins_lb" {
   }
 }
 
+module "jenkins_role" {
+  source = "../modules/roles"
+  role_name = "jenkins_agent_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+  policy_arns = [
+  aws_iam_policy.secretsmanager_readonly.arn
+  ]
+}
+
+resource "aws_iam_instance_profile" "jenkins_agent_instance_profile" {
+  name = "jenkins_agent_i_profile"
+  role = module.jenkins_role.role_name
+}

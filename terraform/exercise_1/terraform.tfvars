@@ -12,7 +12,7 @@ eks_private_subnets = ["10.100.3.0/24", "10.100.4.0/24"]
 environment = "dev"
 
 # AMI IDs
-jenkins_ami       = "ami-0b6c6d3707776c98d" # Jenkins master AMI
+jenkins_ami       = "ami-0b7c2b39aa655297e" # Jenkins master AMI
 jenkins_agent_ami = "ami-0d18c15e6412e4cbb" # Jenkins agent AMI
 bastion_ami       = "ami-0e04bcbe83a83792e" # Bastion host AMI (Ubuntu 24)
 

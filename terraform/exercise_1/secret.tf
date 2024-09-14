@@ -1,3 +1,22 @@
+resource "aws_iam_policy" "secretsmanager_readonly" {
+  name        = "SecretsManagerReadOnlyCustom"
+  description = "Read-only access to AWS Secrets Manager"
+  policy      = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:ListSecrets"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_secretsmanager_secret" "tls_secret" {
   name        = "tls-secret"
   description = "TLS certificate and private key for weather app"
