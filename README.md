@@ -40,6 +40,17 @@ From there, I mapped out the key components and the Terraform modules I would ne
 
 With this approach, I ensured modularity and scalability, allowing for flexibility in future adjustments to the infrastructure.
 
+### Terraform Execution
+
+To execute the Terraform configuration, follow the plan and apply process:
+
+```bash
+terraform plan -out plan
+terraform apply plan
+```
+
+This workflow ensures that changes are reviewed before being applied, providing an opportunity to validate the proposed infrastructure modifications.
+
 ---
 
 ### Prerequisites
@@ -68,11 +79,7 @@ Additionally, a certificate was added for HTTPS, created using the following Ope
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=app.example.com/O=example"
 ```
 
-The secret for the certificate was created using:
-
-```bash
-kubectl create secret tls app-tls-secret --key tls.key --cert tls.crt
-```
+The TLS certificate for the application is managed through AWS Secrets Manager. A Helm chart is deployed to integrate EKS with AWS Secrets Manager, allowing the certificate to be securely accessed and used by the application. This setup ensures seamless and secure management of the TLS certificate, eliminating the need for manual secret creation.
 
 The application is deployed via the [`app.yaml`](application/app.yaml) file.
 
