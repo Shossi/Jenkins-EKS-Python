@@ -74,7 +74,7 @@ The secret for the certificate was created using:
 kubectl create secret tls app-tls-secret --key tls.key --cert tls.crt
 ```
 
-The application is deployed via the [`app.yaml`](./Application/app.yaml) file.
+The application is deployed via the [`app.yaml`](application/app.yaml) file.
 
 ### ArgoCD Usage
 
@@ -122,7 +122,7 @@ The infrastructure is designed for flexibility, security, and scalability, broke
     - Roles are created for the EKS cluster, nodes, and Jenkins components, ensuring least privilege access is maintained throughout the infrastructure.
 
 More information can be found in the corresponding Terraform module readme files:
-- [Exercise 1 Readme](Terraform/exercise_1/readme.md)
+- [Exercise 1 Readme](terraform/exercise_1/readme.md)
 
 ---
 
@@ -135,7 +135,7 @@ For Exercise 5, the goal was to write a Terraform file to create a Linux-based E
 3. Include a security group that allows access only from Leumi Proxy's IP address (91.231.246.50).
 
 More information can be found in the corresponding Terraform module readme files:
-- [Exercise 5 Readme](Terraform/exercise_5/readme.md)
+- [Exercise 5 Readme](terraform/exercise_5/readme.md)
 
 ---
 
