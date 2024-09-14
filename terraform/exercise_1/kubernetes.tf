@@ -157,13 +157,13 @@ module "argocd" {
 }
 
 module "secrets_csi_driver" {
-  source = "../modules/eks/helm"
+  source     = "../modules/eks/helm"
   depends_on = [module.eks_cluster]
-  name   = "secrets-store"
+  name       = "secrets-store"
   repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
-  chart  = "secrets-store-csi-driver"
-  vers = "1.4.4"
-  namespace = "kube-system"
+  chart      = "secrets-store-csi-driver"
+  vers       = "1.4.4"
+  namespace  = "kube-system"
   set = {
     "syncSecret.enabled" = "true"
   }
@@ -179,6 +179,6 @@ module "cluster_autoscaler" {
   namespace  = "kube-system"
   set = {
     "autoDiscovery.clusterName" = module.eks_cluster.cluster_name
-    "awsRegion" = "eu-west-3"
+    "awsRegion"                 = "eu-west-3"
   }
 }

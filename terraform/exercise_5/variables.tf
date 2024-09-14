@@ -13,13 +13,13 @@ variable "associate_public_ip" {
 variable "apache_public_subnets" {
   description = "Public subnets for apache"
   type        = list(string)
-  default = ["10.181.242.0/25"]
+  default     = ["10.181.242.0/25"]
 }
 
 variable "apache_private_subnets" {
   description = "Private subnets for apache"
   type        = list(string)
-  default = ["10.181.242.128/25"]
+  default     = ["10.181.242.128/25"]
 }
 
 variable "azs" {

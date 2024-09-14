@@ -75,7 +75,7 @@ module "jenkins_agent" {
   subnet_id           = module.jenkins_vpc.private_subnet_ids[0]
   key_name            = aws_key_pair.deployer.key_name
   associate_public_ip = false
-#  iam_instance_profile = aws_iam_instance_profile.jenkins_agent_instance_profile.name
+  #  iam_instance_profile = aws_iam_instance_profile.jenkins_agent_instance_profile.name
 }
 
 module "jenkins_lb" {
