@@ -179,6 +179,6 @@ module "cluster_autoscaler" {
   namespace  = "kube-system"
   set = {
     "autoDiscovery.clusterName" = module.eks_cluster.cluster_name
-    "awsRegion"                 = "eu-west-3"
+    "awsRegion"                 = "eu-central-1"
   }
 }
