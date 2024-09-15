@@ -22,9 +22,12 @@ def get_secret():
         response = client.get_secret_value(SecretId=secret_name)
         secret = response['SecretString']
         secret_dict = json.loads(secret)
-        return secret_dict['key']
+        return secret_dict['api_key']
     except Exception as e:
         raise Exception(f"Error retrieving secret: {e}")
+
+
+key = get_secret()
 
 
 def valid_input(location):
