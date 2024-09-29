@@ -29,3 +29,22 @@ resource "aws_secretsmanager_secret_version" "my_tls_secret_version" {
     "tls.key" = file("/home/yossi/tls.key")
   })
 }
+
+resource "aws_iam_policy" "secretsmanager_read_all" {
+  name        = "SecretsManagerReadAll"
+  description = "Allow read access to all secrets in AWS Secrets Manager"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}

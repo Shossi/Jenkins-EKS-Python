@@ -123,7 +123,8 @@ module "eks_node_group_role" {
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
     aws_iam_policy.secretsmanager_readonly.arn,
-    "arn:aws:iam::aws:policy/AutoScalingFullAccess"
+    "arn:aws:iam::aws:policy/AutoScalingFullAccess",
+    aws_iam_policy.secretsmanager_read_all.arn
   ]
 }
 
